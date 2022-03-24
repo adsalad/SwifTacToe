@@ -22,6 +22,7 @@ struct ContentView: View {
     
     @State private var moves: [Move?] = Array(repeating: nil, count: 9)
     @State private var disabledBoard : Bool = false
+    @State private var alertItem: AlertItem?
     
     var body: some View {
         GeometryReader { geo in
@@ -45,16 +46,18 @@ struct ContentView: View {
                                 return //exit case
                             }
                             moves[i] = Move(player: .human, boardIndex: i)
-                            disabledBoard.toggle()
-                            
-                            
+                                                        
                             if checkWinCondition(for: .human, in: moves) {
-                                print("Human Wins")
+                                alertItem = AlertContext.humanWin
+                                return
                             }
                             
                             if checkDrawCondition(in: moves){
-                                print("Draw")
+                                alertItem = AlertContext.draw
+                                return
                             }
+                            disabledBoard.toggle()
+
                             
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                                 let computerPosition = determineComputerMove(in: moves) //easy mode
@@ -62,11 +65,13 @@ struct ContentView: View {
                                 disabledBoard.toggle()
                                 
                                 if checkWinCondition(for: .computer, in: moves) {
-                                    print("Computer Wins")
+                                    alertItem = AlertContext.computerWin
+                                    return
                                 }
                                 
                                 if checkDrawCondition(in: moves){
-                                    print("Draw")
+                                    alertItem = AlertContext.draw
+                                    return
                                 }
                             }
                         }
@@ -74,7 +79,10 @@ struct ContentView: View {
                 }
                 Spacer()
             }.padding()
-                .disabled(disabledBoard)
+            .disabled(disabledBoard)
+            .alert(item: $alertItem, content: { alertItem in
+                Alert(title: alertItem.title, message: alertItem.message, dismissButton: .default(alertItem.buttonTitle, action: {resetGame()}))
+            })
         }
     }
     
@@ -108,6 +116,10 @@ struct ContentView: View {
             return true
         }
         return false
+    }
+    
+    func resetGame() {
+       moves = Array(repeating: nil, count: 9)
     }
 }
 
