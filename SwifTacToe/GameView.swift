@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  GameView.swift
 //  SwifTacToe
 //
 //  Created by Adam S on 2022-03-07.
@@ -11,7 +11,7 @@ import SwiftUI
 //display status after board is filled
 
 
-struct ContentView: View {
+struct GameView: View {
     
     let columns: [GridItem] = [
         GridItem(.flexible()),
@@ -92,8 +92,46 @@ struct ContentView: View {
     }
     
     func determineComputerMove(in moves: [Move?]) -> Int {
-        var movePosition = Int.random(in: 0..<9)
         
+        
+        // if AI can win, then win
+        let winPatterns: Set<Set<Int>> = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]]
+        let computerMoves = moves.compactMap {$0}.filter{$0.player == .computer}
+        let computerPositions = Set(computerMoves.map {$0.boardIndex})
+        
+        for pattern in winPatterns {
+            let blockPositions = pattern.subtracting(computerPositions) // find set of winning move(s), based on moves computer has already performed
+            
+            // if there is only one winning move available, take it and win!
+            if blockPositions.count == 1 {
+                let isAvailable = !isOccupied(in: moves, forIndex: blockPositions.first!)
+                if isAvailable { return blockPositions.first!}
+            }
+        }
+        
+        // if AI can't win, then block
+        let humanMoves = moves.compactMap {$0}.filter{$0.player == .human}
+        let humanPositions = Set(humanMoves.map {$0.boardIndex})
+        
+        for pattern in winPatterns {
+            let winPositions = pattern.subtracting(humanPositions) // find set of winning move(s), based on moves computer has already performed
+            
+            // if there is a block move available, block the human player!
+            if winPositions.count == 1 {
+                let isAvailable = !isOccupied(in: moves, forIndex: winPositions.first!)
+                if isAvailable { return winPositions.first!}
+            }
+        }
+        
+        
+        //if AI can't block, take middle square
+        let centerCircle = 4
+        if !isOccupied(in: moves, forIndex: centerCircle) {
+            return 4
+        }
+    
+        //if AI can't take middle, take random square
+        var movePosition = Int.random(in: 0..<9)
         while isOccupied(in: moves, forIndex: movePosition) {
             movePosition = Int.random(in: 0..<9)
         }
@@ -102,7 +140,7 @@ struct ContentView: View {
     
     func checkWinCondition(for player: Player, in moves: [Move?]) -> Bool {
         let winPatterns: Set<Set<Int>> = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]]
-        let playerMoves = moves.compactMap {$0}.filter{$0.player == player} //filter Move objects with human or computer attribute (depending on paramter)
+        let playerMoves = moves.compactMap {$0}.filter{$0.player == player} // filter Move objects with human or computer attribute (depending on paramter)
         let playerPositions = Set(playerMoves.map {$0.boardIndex}) // create boardIndex Set of above filtered computer/human Move objects
     
         for pattern in winPatterns where pattern.isSubset(of: playerPositions) {
@@ -137,6 +175,6 @@ struct Move {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        GameView()
     }
 }
