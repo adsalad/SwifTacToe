@@ -7,23 +7,29 @@
 
 import SwiftUI
 
-//allow difficulty selection
-//display status after board is filled
+//change difficulty logic
+//change alert text
+//extract views in HomeView and GameView
 
+//add custom colors and a file just for views
 
 struct GameView: View {
     
-    @StateObject private var viewModel = GameViewModel()
+    @StateObject var viewModel = GameViewModel()
     
     var body: some View {
         GeometryReader { geo in
             VStack{
+            
                 Spacer()
+                Text("SwifTacToe")
+                    .font(.custom("Courier", size: 50))
+                    .foregroundColor(Color(red: 75/255, green: 0/255, blue: 226/255))
                 LazyVGrid(columns: viewModel.columns, spacing: 5) {
                     ForEach(0..<9) { i in
                         ZStack {
                             Circle()
-                                .foregroundColor(Color(red: 75/255, green: 0/255, blue: 226/255)).opacity(0.7)
+                                .foregroundColor(Color(red: 75/255, green: 0/255, blue: 226/255))
                                 .frame(width: geo.size.width/3 - 15, height: geo.size.width/3 - 15)
                                 .padding()
                             
@@ -39,17 +45,20 @@ struct GameView: View {
                 }
                 Spacer()
             }
-//            .sheet(isPresented: $viewModel.activeSheet, content: {
-//                HomeView(viewModel: viewModel)
-//            })
+            .sheet(isPresented: $viewModel.activeSheet, content: {
+                HomeView(viewModel: viewModel)
+            })
             .padding()
-                .disabled(viewModel.disabledBoard)
-                .alert(item: $viewModel.alertItem, content: { alertItem in
-                    Alert(title: alertItem.title, message: alertItem.message, dismissButton: .default(alertItem.buttonTitle, action: {viewModel.resetGame()}))
-    
+            .disabled(viewModel.disabledBoard)
+            .alert(item: $viewModel.alertItem, content: { alertItem in
+                Alert(title: alertItem.title, message: alertItem.message, dismissButton: .default(alertItem.buttonTitle, action: {
+                    viewModel.resetGame()
+                    viewModel.activeSheet.toggle()
+                }))
             })
         }
     }
+    
 }
 
 enum Player {

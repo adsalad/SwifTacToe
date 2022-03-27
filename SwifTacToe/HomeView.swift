@@ -9,14 +9,13 @@ import SwiftUI
 
 struct HomeView: View {
     
-    @StateObject private var viewModel : GameViewModel
+    @StateObject var viewModel : GameViewModel
     @Environment(\.dismiss) var dismiss
 
     
     var body: some View {
             ZStack {
                 Color(UIColor(red: 75/255, green: 0/255, blue: 226/255, alpha: 1))
-                    .opacity(0.8)
                     .ignoresSafeArea()
                 VStack{
                     
@@ -33,12 +32,12 @@ struct HomeView: View {
 
                     HStack {
                         DifficultyButton(title: "Easy") {
-                            viewModel.selected = "Easy"
+                            viewModel.selected = .easy
                             viewModel.activeSheet = false
                             dismiss()
                         }
                         DifficultyButton(title: "Hard") {
-                            viewModel.selected = "Hard"
+                            viewModel.selected = .hard
                             viewModel.activeSheet = false
                             dismiss()
                         }
@@ -53,6 +52,10 @@ struct HomeView: View {
                 )
             }
         }
+}
+
+enum Difficulty {
+    case easy, hard
 }
 
 struct DifficultyButton: View {
