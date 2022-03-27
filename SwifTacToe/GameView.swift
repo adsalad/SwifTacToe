@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-//change difficulty logic
-//change alert text
 //extract views in HomeView and GameView
 
 //add custom colors and a file just for views
@@ -20,23 +18,13 @@ struct GameView: View {
     var body: some View {
         GeometryReader { geo in
             VStack{
-            
                 Spacer()
-                Text("SwifTacToe")
-                    .font(.custom("Courier", size: 50))
-                    .foregroundColor(Color(red: 75/255, green: 0/255, blue: 226/255))
+                GameTextView(title: "SwifTacToe", size: 50, color: Color.gamePurple)
                 LazyVGrid(columns: viewModel.columns, spacing: 5) {
                     ForEach(0..<9) { i in
                         ZStack {
-                            Circle()
-                                .foregroundColor(Color(red: 75/255, green: 0/255, blue: 226/255))
-                                .frame(width: geo.size.width/3 - 15, height: geo.size.width/3 - 15)
-                                .padding()
-                            
-                            Image(systemName: viewModel.moves[i]?.indicator ?? "")
-                                .resizable()
-                                .frame(width: 40, height: 40)
-                                .foregroundColor(.white)
+                            GameCircleView(proxy: geo)
+                            PlayerMarkView(imageName: viewModel.moves[i]?.indicator ?? "")
                         }
                         .onTapGesture {
                             viewModel.processPlayerMove(for: i)
@@ -78,3 +66,4 @@ struct ContentView_Previews: PreviewProvider {
         GameView()
     }
 }
+

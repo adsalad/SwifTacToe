@@ -45,7 +45,6 @@ final class GameViewModel: ObservableObject {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
             
             let computerPosition = determineComputerMove(in: moves)
-    
             
             moves[computerPosition] = Move(player: .computer, boardIndex: computerPosition)
             disabledBoard.toggle()
