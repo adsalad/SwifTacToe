@@ -27,12 +27,14 @@ struct GameTextView: View {
 }
 
 struct DifficultyButton: View {
-    let title: String
-    let action: () -> Void
+    var title: String
+    var width: CGFloat
+    var height: CGFloat
+    var action: () -> Void
     
     var body: some View {
         Button(title, action: action)
-            .frame(width: 40, height: 10)
+            .frame(width: width, height: height)
             .foregroundColor(Color.gamePurple)
             .padding()
             .background(.white)

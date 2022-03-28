@@ -7,13 +7,10 @@
 
 import SwiftUI
 
-//extract views in HomeView and GameView
-
-//add custom colors and a file just for views
-
 struct GameView: View {
     
     @StateObject var viewModel = GameViewModel()
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         GeometryReader { geo in
@@ -35,6 +32,8 @@ struct GameView: View {
             }
             .sheet(isPresented: $viewModel.activeSheet, content: {
                 HomeView(viewModel: viewModel)
+            .interactiveDismissDisabled()
+
             })
             .padding()
             .disabled(viewModel.disabledBoard)
@@ -50,14 +49,18 @@ struct GameView: View {
 }
 
 enum Player {
-    case human, computer
+    case humanPlayer, opponentPlayer, computer
 }
 
 struct Move {
     let player: Player
     let boardIndex: Int
     var indicator: String {
-        return player == .human ? "xmark" : "circle"
+        if player == .humanPlayer {
+            return "xmark"
+        } else  {
+            return "circle"
+        }
     }
 }
 

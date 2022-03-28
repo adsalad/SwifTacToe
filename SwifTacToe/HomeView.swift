@@ -18,19 +18,34 @@ struct HomeView: View {
                 .ignoresSafeArea()
             VStack{
                 GameTextView(title: "SwifTacToe", size: 50, color: .white)
-                GameTextView(title: "Select Difficulty", size: 20, color: .white)
+                GameTextView(title: "Game Mode", size: 20, color: .white)
                     .padding(.top, -8)
-                
                 HStack {
-                    DifficultyButton(title: "Easy") {
-                        viewModel.selected = .easy
-                        viewModel.activeSheet = false
+                    DifficultyButton(title: "Human", width: 80, height: 10) {
+                        viewModel.opponentSelected = .humanOpponent
                         dismiss()
                     }
-                    DifficultyButton(title: "Hard") {
-                        viewModel.selected = .hard
-                        viewModel.activeSheet = false
-                        dismiss()
+                    DifficultyButton(title: "Computer", width: 80, height: 10) {
+                        viewModel.opponentSelected = .computerOpponent
+                    }
+                }
+                
+                if viewModel.opponentSelected == .computerOpponent {
+                    
+                    GameTextView(title: "Select Difficulty", size: 20, color: .white)
+                        .padding(.top, 4)
+                    
+                    HStack {
+                        DifficultyButton(title: "Easy", width: 40, height: 10) {
+                            viewModel.difficultySelected = .easy
+                            viewModel.activeSheet = false
+                            dismiss()
+                        }
+                        DifficultyButton(title: "Hard", width: 40, height: 10) {
+                            viewModel.difficultySelected = .hard
+                            viewModel.activeSheet = false
+                            dismiss()
+                        }
                     }
                 }
             }
@@ -45,6 +60,12 @@ struct HomeView: View {
     }
 }
 
-enum Difficulty {
+enum DifficultySelected {
     case easy, hard
 }
+
+enum OpponentSelected {
+    case computerOpponent, humanOpponent, noSelection
+}
+
+
