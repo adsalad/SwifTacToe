@@ -167,7 +167,6 @@ final class GameViewModel: ObservableObject {
     func resetGame() {
         moves = Array(repeating: nil, count: 9)
         isOpponentTurn = false
-        activeSheet = false
         opponentSelected = .noSelection
         difficultySelected = .easy
     }
