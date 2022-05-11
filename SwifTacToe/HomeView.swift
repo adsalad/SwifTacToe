@@ -60,6 +60,7 @@ struct HomeView: View {
     }
 }
 
+
 enum DifficultySelected {
     case easy, hard
 }

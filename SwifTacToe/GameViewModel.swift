@@ -134,6 +134,7 @@ final class GameViewModel: ObservableObject {
         return takeRandomCircle(in: moves)
     }
     
+    
     func checkWinCondition(for player: Player, in moves: [Move?]) -> Bool {
         let winPatterns: Set<Set<Int>> = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]]
         let playerMoves = moves.compactMap {$0}.filter{$0.player == player}
@@ -145,6 +146,7 @@ final class GameViewModel: ObservableObject {
         return false
     }
     
+    
     func takeRandomCircle(in moves: [Move?]) -> Int {
         var movePosition = Int.random(in: 0..<9)
         while isOccupied(in: moves, forIndex: movePosition) {
@@ -153,6 +155,7 @@ final class GameViewModel: ObservableObject {
         return movePosition
     }
     
+    
     func checkDrawCondition(in moves: [Move?]) -> Bool {
         if moves.compactMap({$0}).count == 9 {
             return true
@@ -160,9 +163,11 @@ final class GameViewModel: ObservableObject {
         return false
     }
     
+    
     func isOccupied(in moves: [Move?], forIndex index: Int) -> Bool {
         return moves.contains(where: {$0?.boardIndex == index}) // if unoccupied, it would be null
     }
+    
     
     func resetGame() {
         moves = Array(repeating: nil, count: 9)

@@ -14,6 +14,7 @@ extension Color {
     }
 }
 
+
 struct GameTextView: View {
     var title: String
     var size: CGFloat
@@ -25,6 +26,7 @@ struct GameTextView: View {
             .foregroundColor(color)
     }
 }
+
 
 struct DifficultyButton: View {
     var title: String
@@ -42,6 +44,7 @@ struct DifficultyButton: View {
     }
 }
 
+
 struct GameCircleView: View {
     var proxy: GeometryProxy
     
@@ -52,6 +55,7 @@ struct GameCircleView: View {
             .padding()
     }
 }
+
 
 struct PlayerMarkView: View {
     var imageName : String
