@@ -24,7 +24,7 @@ struct GameView: View {
                             PlayerMarkView(imageName: viewModel.moves[i]?.indicator ?? "")
                         }
                         .onTapGesture {
-                            viewModel.processPlayerMove(for: i)
+                            viewModel.processMove(for: i)
                         }
                     }
                 }
