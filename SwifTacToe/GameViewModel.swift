@@ -21,10 +21,11 @@ final class GameViewModel: ObservableObject {
     @Published var isOpponentTurn : Bool = false
     @Published var activeSheet : Bool = true
     @Published var alertItem: AlertItem?
+
     
     // some aspects of this function require a bit of refactoring
     func processMove(for position: Int) {
-        
+
         // human opponent move processing
         if isOpponentTurn {
             if isOccupied(in: moves, forIndex: position) {
@@ -32,12 +33,12 @@ final class GameViewModel: ObservableObject {
             }
             moves[position] = Move(player: .opponentPlayer, boardIndex: position)
             isOpponentTurn.toggle()
-            
+
             if checkWinCondition(for: .opponentPlayer, in: moves) {
                 alertItem = AlertContext.humanWin
                 return
             }
-            
+
             if checkDrawCondition(in: moves){
                 alertItem = AlertContext.draw
                 return
@@ -45,13 +46,13 @@ final class GameViewModel: ObservableObject {
         }
 
 
+        
         // main player move processing
         if isOccupied(in: moves, forIndex: position) {
             return
         }
 
         moves[position] = Move(player: .humanPlayer, boardIndex: position) // add Move object array
-
 
         if checkWinCondition(for: .humanPlayer, in: moves) {
             alertItem = AlertContext.humanWin
@@ -65,7 +66,7 @@ final class GameViewModel: ObservableObject {
 
         if opponentSelected == .humanOpponent {isOpponentTurn.toggle()} // hand game back to opponent
         if opponentSelected == .computerOpponent {disabledBoard.toggle()} // only disable board if playing against computer
-       
+
 
 
         // computer move processing
@@ -90,7 +91,8 @@ final class GameViewModel: ObservableObject {
         }
     }
     
-    
+
+
     func determineComputerMove(in moves: [Move?]) -> Int {
         
         // if difficulty is easy, just take random square
@@ -139,7 +141,8 @@ final class GameViewModel: ObservableObject {
         return takeRandomCircle(in: moves)
     }
     
-    
+
+
     func checkWinCondition(for player: Player, in moves: [Move?]) -> Bool {
         let winPatterns: Set<Set<Int>> = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]]
         let playerMoves = moves.compactMap {$0}.filter{$0.player == player}
@@ -151,7 +154,8 @@ final class GameViewModel: ObservableObject {
         return false
     }
     
-    
+
+
     func takeRandomCircle(in moves: [Move?]) -> Int {
         var movePosition = Int.random(in: 0..<9)
         while isOccupied(in: moves, forIndex: movePosition) {
@@ -160,7 +164,8 @@ final class GameViewModel: ObservableObject {
         return movePosition
     }
     
-    
+
+
     func checkDrawCondition(in moves: [Move?]) -> Bool {
         if moves.compactMap({$0}).count == 9 {
             return true
@@ -168,11 +173,13 @@ final class GameViewModel: ObservableObject {
         return false
     }
     
-    
+
+
     func isOccupied(in moves: [Move?], forIndex index: Int) -> Bool {
         return moves.contains(where: {$0?.boardIndex == index}) // if unoccupied, it would be null
     }
-    
+
+
     
     func resetGame() {
         moves = Array(repeating: nil, count: 9)
